@@ -1,12 +1,25 @@
-import { ChangeEvent, useEffect, useState } from "react";
-import { useQuery, gql } from "@apollo/client";
+import { ChangeEvent, useState } from "react";
+import { gql, useLazyQuery } from "@apollo/client";
+import BookSearchResult from "./BookSearchResult";
 
-const GET_BOOKSLISTSEARCH = gql`
-  query Books($author: String!) {
-    book(author: $author) {
+const GET_BOOKSLIST = gql`
+  query Books {
+    books {
+      author
       coverPhotoURL
       readingLevel
       title
+    }
+  }
+`;
+
+const SEARCH_BOOKS = gql`
+  query SearchBooks($title: String!) {
+    searchBooks(title: $title) {
+      title
+      author
+      coverPhotoURL
+      readingLevel
     }
   }
 `;
@@ -14,21 +27,22 @@ function Search() {
   const [searchFilter, setSearchFilter] = useState(
     "Curious Princess and the Enchanted Garden"
   );
-  const { loading, error, data } = useQuery(GET_BOOKSLISTSEARCH, {
-    variables: { author: searchFilter },
+  // const [books, setBooks] = useState<Book[] | null>(null);
+  // const [result, setResult] = useState<Book[] | null>(null);
+  // const [searchError, setSearchError] = useState<string>(null);
+  const [searchBooks, { loading, error, data }] = useLazyQuery(SEARCH_BOOKS, {
+    variables: { title: "Garden" },
   });
 
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setSearchFilter(value);
+    searchBooks({ variables: { title: value } });
+  };
   error && console.log(error.message);
 
-  data && console.log(data);
+  console.log(data);
 
-  //input change handler
-  const handleChange = async (e: ChangeEvent<HTMLInputElement>) => {};
-
-  //triggers on every input change
-  useEffect(() => {
-    // handleSearch(bookname);
-  }, [searchFilter]);
   return (
     <div className="mt-[50px] flex flex-col gap-3">
       <div>Search for a particular book</div>
@@ -37,17 +51,15 @@ function Search() {
         onChange={handleChange}
         className="border border-primary-turquoise h-9 w-full p-2"
       ></input>
-      {/* {loading && <p>loading...</p>}
-      {!loading && error && <p>Book not found.</p>}
-      {searchResults &&
-        searchResults.map((book: Book) => {
-          return (
-            <div className=" shadow-md rounded-sm h-[100px] overflow-auto p-3">
-              search results..
-              <BookSearchResult bookData={book} />
-            </div>
-          );
-        })} */}
+      {loading && <p>loading....</p>}
+      {error && <p>no result found</p>}
+      <div className="shadow-md rounded-sm h-[300px] bg-gray-400 text-white overflow-auto p-3 border z-50 flex flex-col w-full items-center">
+        search results..
+        {data?.searchBooks?.map((book: Book) => {
+          return <BookSearchResult bookData={book} />;
+        })}
+      </div>
+      );
     </div>
   );
 }

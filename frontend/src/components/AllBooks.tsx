@@ -4,9 +4,6 @@ import BookCard from "./BookCard";
 
 function AllBooks() {
   const { data, loading, error } = useGetAllBooks();
-  useEffect(() => {
-    console.log("rendered");
-  }, []);
 
   return (
     <div className=" w-full">
