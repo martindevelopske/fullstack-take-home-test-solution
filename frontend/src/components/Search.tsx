@@ -1,48 +1,45 @@
-import { ChangeEvent, useState } from "react";
-import { gql, useLazyQuery } from "@apollo/client";
+import { ChangeEvent, useEffect, useState } from "react";
 import BookSearchResult from "./BookSearchResult";
+import useSearch from "../hooks/useSearch";
 
-const SEARCH_BOOKS = gql`
-  query SearchBooks($title: String!) {
-    searchBooks(title: $title) {
-      title
-      author
-      coverPhotoURL
-      readingLevel
-    }
-  }
-`;
 function Search() {
   const [searchFilter, setSearchFilter] = useState<string | null>(null);
-  // const [books, setBooks] = useState<Book[] | null>(null);
-  // const [result, setResult] = useState<Book[] | null>(null);
-  // const [searchError, setSearchError] = useState<string>(null);
-  const [searchBooks, { loading, error, data }] = useLazyQuery(SEARCH_BOOKS, {
-    variables: { title: "Garden" },
-  });
 
-  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setSearchFilter(e.target.value);
-    searchBooks({ variables: { title: searchFilter } });
+  const { searchBooks, loading, error, data } = useSearch(searchFilter);
 
-    // Check if input value is empty
-    if (!e.target.value.trim()) {
-      // Reset the data state to null
-      searchBooks({ variables: { title: null } });
-    } else {
-      // Otherwise, perform the search
-      searchBooks({ variables: { title: "" } });
-    }
+  const handleChange = async (e: ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value.trim();
+    setSearchFilter(value);
   };
 
+  useEffect(() => {
+    // Perform the search when searchFilter changes
+    if (searchFilter === "") {
+      searchBooks({ variables: { title: null } });
+    } else {
+      searchBooks({ variables: { title: searchFilter } });
+    }
+  }, [searchBooks, searchFilter]);
   return (
     <div className="mt-[50px] flex flex-col gap-3">
       <div>Search for a particular book</div>
-      <input
-        placeholder="Book"
-        onChange={handleChange}
-        className="border border-primary-turquoise h-9 w-full p-2"
-      ></input>
+      <div className="flex gap-3 w-full">
+        <input
+          placeholder="Book"
+          onChange={handleChange}
+          className="border border-primary-turquoise h-9 w-full p-2"
+          value={searchFilter ? searchFilter : ""}
+        ></input>
+        <div
+          className="rounded-md border bg-secondary-orange-red p-1 text-white text-sm w-16 flex items-center justify-center mb-2 cursor-pointer hover:scale-95"
+          onClick={() => {
+            setSearchFilter("");
+          }}
+        >
+          {" "}
+          Clear
+        </div>
+      </div>
       {loading && <p>loading....</p>}
       {error && <p>no result found</p>}
       {data?.searchBooks && (

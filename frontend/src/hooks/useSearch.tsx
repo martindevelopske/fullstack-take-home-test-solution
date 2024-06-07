@@ -1,22 +1,22 @@
-import { useQuery, gql } from "@apollo/client";
+import { gql, useLazyQuery } from "@apollo/client";
 
-const GET_BOOKSLISTSEARCH = gql`
-  query Books($title: String!) {
-    books(where: { title: $title }) {
+const SEARCH_BOOKS = gql`
+  query SearchBooks($title: String!) {
+    searchBooks(title: $title) {
+      title
       author
       coverPhotoURL
       readingLevel
-      title
     }
   }
 `;
 
-const useSearch = (title: string) => {
-  const { loading, error, data } = useQuery(GET_BOOKSLISTSEARCH, {
-    variables: { title: "Curious Princess and the Enchanted Garden" },
+const useSearch = (title: string | null) => {
+  const [searchBooks, { loading, error, data }] = useLazyQuery(SEARCH_BOOKS, {
+    variables: { title: title },
   });
 
-  return { data, loading, error };
+  return { searchBooks, data, loading, error };
 };
 
 export default useSearch;

@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import useGetAllBooks from "../hooks/useGetAllBooks";
 import BookCard from "./BookCard";
 
