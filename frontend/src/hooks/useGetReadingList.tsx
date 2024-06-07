@@ -1,3 +1,4 @@
+//temporary holder for a reading list. Normally this would be persisted on a database.
 export const readinglist: Book[] = [
   {
     title: "Curious Princess and the Enchanted Garden",
