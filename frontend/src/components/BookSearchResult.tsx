@@ -1,14 +1,13 @@
 import { readinglist } from "../hooks/useGetReadingList";
 
 function BookSearchResult({ bookData }: { bookData: Book }) {
-  const { title, author, coverPhotoURL, readingLevel } = bookData;
-  console.log(bookData);
+  const { title, coverPhotoURL } = bookData;
 
   const addToreadingList = (book: Book) => {
     readinglist.push(book);
   };
   return (
-    <div className="border flex h-auto">
+    <div className="border flex h-auto p-1 rounded-md bg-white text-black gap-2">
       <img src={coverPhotoURL} className="h-[100px] w-[100px]"></img>
       <div className="flex flex-col items-center justify-between">
         {title}

@@ -2,17 +2,6 @@ import { ChangeEvent, useState } from "react";
 import { gql, useLazyQuery } from "@apollo/client";
 import BookSearchResult from "./BookSearchResult";
 
-const GET_BOOKSLIST = gql`
-  query Books {
-    books {
-      author
-      coverPhotoURL
-      readingLevel
-      title
-    }
-  }
-`;
-
 const SEARCH_BOOKS = gql`
   query SearchBooks($title: String!) {
     searchBooks(title: $title) {
@@ -24,9 +13,7 @@ const SEARCH_BOOKS = gql`
   }
 `;
 function Search() {
-  const [searchFilter, setSearchFilter] = useState(
-    "Curious Princess and the Enchanted Garden"
-  );
+  const [searchFilter, setSearchFilter] = useState<string | null>(null);
   // const [books, setBooks] = useState<Book[] | null>(null);
   // const [result, setResult] = useState<Book[] | null>(null);
   // const [searchError, setSearchError] = useState<string>(null);
@@ -35,13 +22,18 @@ function Search() {
   });
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    setSearchFilter(value);
-    searchBooks({ variables: { title: value } });
-  };
-  error && console.log(error.message);
+    setSearchFilter(e.target.value);
+    searchBooks({ variables: { title: searchFilter } });
 
-  console.log(data);
+    // Check if input value is empty
+    if (!e.target.value.trim()) {
+      // Reset the data state to null
+      searchBooks({ variables: { title: null } });
+    } else {
+      // Otherwise, perform the search
+      searchBooks({ variables: { title: "" } });
+    }
+  };
 
   return (
     <div className="mt-[50px] flex flex-col gap-3">
@@ -53,13 +45,14 @@ function Search() {
       ></input>
       {loading && <p>loading....</p>}
       {error && <p>no result found</p>}
-      <div className="shadow-md rounded-sm h-[300px] bg-gray-400 text-white overflow-auto p-3 border z-50 flex flex-col w-full items-center">
-        search results..
-        {data?.searchBooks?.map((book: Book) => {
-          return <BookSearchResult bookData={book} />;
-        })}
-      </div>
-      );
+      {data?.searchBooks && (
+        <div className="shadow-md rounded-sm h-[300px] bg-gray-400 text-white overflow-auto p-3 border z-50 flex flex-col w-full items-center gap-1">
+          search results..
+          {data?.searchBooks?.map((book: Book) => {
+            return <BookSearchResult bookData={book} key={Math.random()} />;
+          })}
+        </div>
+      )}
     </div>
   );
 }
