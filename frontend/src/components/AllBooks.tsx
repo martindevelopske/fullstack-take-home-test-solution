@@ -11,7 +11,6 @@ function AllBooks() {
   const endIndex = currentPage * itemsPerPage;
 
   const totalBooks = data?.books?.length || 0;
-  console.log(endIndex, totalBooks);
 
   const handleNextPage = () => {
     setCurrentPage((prevPage) => prevPage + 1);
