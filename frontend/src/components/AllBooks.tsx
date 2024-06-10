@@ -36,28 +36,6 @@ function AllBooks() {
         )}
       </div>
       <div className="flex gap-2 p-2 mb-10 border-t w-full">
-        {/* <button
-          onClick={() => {
-            setCurrentPage((prevPage) => prevPage - 1);
-            window.scroll(0, 0);
-          }}
-          disabled={currentPage === 1}
-          className="border text-white bg-secondary-orange-red p-2 rounded-md"
-        >
-          Previous Page
-        </button>
-        <div className="p-2 flex items-center">{currentPage}</div>
-        <button
-          onClick={() => {
-            setCurrentPage((prevPage) => prevPage + 1);
-            //scroll to top
-            window.scroll(0, 0);
-          }}
-          disabled={!data?.books || data?.books?.length < itemsPerPage}
-          className="border text-white bg-secondary-orange-red p-2 rounded-md"
-        >
-          Next Page
-        </button> */}
         <button
           onClick={handlePreviousPage}
           disabled={currentPage === 1}

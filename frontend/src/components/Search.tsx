@@ -21,7 +21,7 @@ function Search() {
     }
   }, [searchBooks, searchFilter]);
   return (
-    <div className="mt-[50px] flex flex-col gap-3">
+    <div className="mt-[50px] flex flex-col gap-3 w-full">
       <div>Search for a particular book</div>
       <div className="flex gap-3 w-full">
         <input
