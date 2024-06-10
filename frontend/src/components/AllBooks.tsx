@@ -12,13 +12,6 @@ function AllBooks() {
   return (
     <div className=" w-full flex flex-col items-center">
       <div className="flex gap-1 flex-wrap items-center justify-around mt-10">
-        {/* {loading ? (
-          <div>Loading...</div>
-        ) : (
-          data.books?.map((book: Book) => (
-            <BookCard key={Math.random()} bookData={book} />
-          ))
-        )} */}
         {loading ? (
           <div>Loading...</div>
         ) : (
