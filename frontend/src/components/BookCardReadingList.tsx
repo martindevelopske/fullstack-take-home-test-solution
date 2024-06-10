@@ -1,7 +1,5 @@
-import AddIcon from "@mui/icons-material/Add";
 import DeleteIcon from "@mui/icons-material/Delete";
 import CheckIcon from "@mui/icons-material/Check";
-import { readinglist } from "../hooks/useGetReadingList";
 import { Dispatch, SetStateAction, useState } from "react";
 
 function BookCardReadingList({

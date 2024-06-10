@@ -1,5 +1,5 @@
 import { useState } from "react";
-import useGetReadingList, { readinglist } from "../hooks/useGetReadingList";
+import useGetReadingList from "../hooks/useGetReadingList";
 import BookCardReadingList from "./BookCardReadingList";
 
 function ReadingList() {
