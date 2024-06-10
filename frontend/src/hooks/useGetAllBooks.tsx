@@ -13,7 +13,6 @@ const GET_BOOKSLIST = gql`
 
 const useGetAllBooks = () => {
   const { loading, error, data } = useQuery(GET_BOOKSLIST);
-  console.log({ loading, error, data });
 
   return { data, loading, error };
 };
