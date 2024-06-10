@@ -4,6 +4,8 @@ import BookCard from "./BookCard";
 
 function AllBooks() {
   const { data, loading, error } = useGetAllBooks();
+  console.log(data);
+
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
   const startIndex = (currentPage - 1) * itemsPerPage;
@@ -12,13 +14,12 @@ function AllBooks() {
   return (
     <div className=" w-full flex flex-col items-center">
       <div className="flex gap-1 flex-wrap items-center justify-around mt-10">
-        {loading ? (
-          <div>Loading...</div>
-        ) : (
-          data.books
+        {loading && <div>Loading...</div>}
+        {data &&
+          data?.books
             ?.slice(startIndex, endIndex) // Slice data based on current page
-            .map((book: Book) => <BookCard key={Date.now()} bookData={book} />)
-        )}
+            .map((book: Book) => <BookCard key={book.title} bookData={book} />)}
+
         {error && (
           <div>Error fetching your reading List. Please Refresh the page. </div>
         )}
@@ -41,7 +42,7 @@ function AllBooks() {
             //scroll to top
             window.scroll(0, 0);
           }}
-          disabled={!data.books || data.books.length < itemsPerPage}
+          disabled={!data?.books || data?.books?.length < itemsPerPage}
           className="border text-white bg-secondary-orange-red p-2 rounded-md"
         >
           Next Page
